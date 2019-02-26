@@ -11,6 +11,21 @@
 	</div>
 	<!-- Reference to Vue.js Library -->
 	<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+
+	<!-- script Element for Template -->
+	<script id="myTemplate" type="x-template">
+		<div>
+			{{name}},create by Script
+		</div>
+	</script>
+
+	<!-- template Element for Template -->
+	<template id="myTemplateScript">
+		<div>
+			{{name}},create by template Script
+		</div>
+	</template>
+
 	<script>
 		// 使用`browser-sync -w`命令实时刷新浏览器
 		var mountElement = document.getElementById("app")
@@ -27,8 +42,11 @@
 			},
 			// 没有提供template属性和render属性，则作为挂载点的HTML将被作为渲染页面DOM的模板
 			//这个模板首先会被Vue接管，将数据渲染进去，再由Vue生成页面的DOM
-			//Vue使用template属性值的字符串生成dom，替换挂载点的所有HTML元素
+			//Vue使用template属性生成dom，替换挂载点的所有HTML元素
+			//template值可以是字符串
+			//也可以是一段script标签或template（注意浏览器兼容性)
 			template:'<div>{{name}},created by template</div>',
+			// template:"#myTemplateScript"
 		});
 	</script>
 </body>
