@@ -8,6 +8,7 @@
 	<!-- Div to Mount App -->
 	<div id="app">
 		{{name}},created by mounted Div
+		<button @click="clickButton">点击</button>
 	</div>
 	<!-- Reference to Vue.js Library -->
 	<script src="https://cdn.jsdelivr.net/npm/vue"></script>
@@ -35,18 +36,37 @@
 			//也可以是一个dom元素
 			el:'#app',
 			// el:mountElement,
+			//data属性说明:
+			//data属性内变量不能使用$和_开头，不会添加到Vue的响应系统中去，因为会跟Vue内部变量冲突
+			//但是可以使用Vue实例的$data属性访问以$或_开头的属性
+			//预先定义好数据属性，赋值为空字符串，null，undefined
+			//但是不要使用空对象，因为它会被序列化为字符串，类似于JSON.stringigy()
 			data(){
 				return{
-					name:"zonglang"	
+					name:"zonglang",
+					$name:"$zonglang"
 				}	
+			},
+			//methods属性说明:
+			//避免使用箭头函数，因为它会阻止我们访问正确的上下文，如this的指向发生变化
+			//methods和computed的区别，
+			//computed【结果、可缓存】	自动计算
+			//watch   【结果、不可缓存】	数据异步变化或开销较大	
+			//methods【过程、逻辑】   	需要执行
+			methods:{
+				clickButton(){
+					console.log(this.$data.$name)
+				}
 			},
 			// 没有提供template属性和render属性，则作为挂载点的HTML将被作为渲染页面DOM的模板
 			//这个模板首先会被Vue接管，将数据渲染进去，再由Vue生成页面的DOM
+			//template属性说明：
 			//Vue使用template属性生成dom，替换挂载点的所有HTML元素
 			//template值可以是字符串
 			//也可以是一段script标签或template（注意浏览器兼容性)
-			template:'<div>{{name}},created by template</div>',
+			// template:'<div>{{name}},created by template</div>',
 			// template:"#myTemplateScript"
+			//render属性说明：
 			//render 函数也可以创建模板来生成Vue DOM
 			//优先级高于template属性和HTML模板
 		});
