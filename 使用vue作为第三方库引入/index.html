@@ -7,12 +7,29 @@
 <body>
 	<!-- Div to Mount App -->
 	<div id="app">
-		
+		{{name}},created by mounted Div
 	</div>
 	<!-- Reference to Vue.js Library -->
 	<script src="https://cdn.jsdelivr.net/npm/vue"></script>
 	<script>
-		
+		// 使用`browser-sync -w`命令实时刷新浏览器
+		var mountElement = document.getElementById("app")
+		var app = new Vue({
+			//el属性 ==> 指定vue实例在页面上的挂在位置
+			//值可以是一个字符串：css选择器
+			//也可以是一个dom元素
+			el:'#app',
+			// el:mountElement,
+			data(){
+				return{
+					name:"zonglang"	
+				}	
+			},
+			// 没有提供template属性和render属性，则作为挂载点的HTML将被作为渲染页面DOM的模板
+			//这个模板首先会被Vue接管，将数据渲染进去，再由Vue生成页面的DOM
+			//Vue使用template属性值的字符串生成dom，替换挂载点的所有HTML元素
+			template:'<div>{{name}},created by template</div>',
+		});
 	</script>
 </body>
 </html>
