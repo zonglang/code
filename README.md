@@ -44,7 +44,7 @@
 ### call继承
 `功能`：把父类的私有属性变成子类的私有属性
 `核心`：子类构造函数中使用call调用父类构造函数
-
+``` javascript
     function Father(){
 	    this.handsome = true;
 	    this.rich = true;
@@ -52,6 +52,7 @@
     function Son(){
 	    Father.call(this)
     }
+```
  `不足`：
  - 只能继承父类的私有属性和方法
  - 不能实现函数复用，每个子类实例都有一样的函数，影响性能
@@ -61,7 +62,7 @@
  `功能`:子类继承父类的公有+私有属性和方法
  `核心`:在子类构造函数中遍历父类实例
  
-
+```javascript
     function Father(){
 		this.hansome = true;
 	}
@@ -77,6 +78,7 @@
 			*/
 		}
 	}
+```
  `不足`:
  - 如果拷贝公有属性的话也无法很好的进行函数复用
  
@@ -85,7 +87,7 @@
 #### call+原型继承
 功能：继承公有+私有
 核心：原型继承+call继承
-
+```javascript
     function Father(){
 	    this.handsome = true;
     }
@@ -94,6 +96,7 @@
     }
     Son.prototype = new Father();
     Son.constructor = Son;
+```
 不足：
 - 使用了两次父类的构造函数
 - 子类的原型上有多余一份的父类的属性
@@ -101,7 +104,7 @@
 #### call+拷贝继承
 功能：call继承私有、拷贝继承原型
 核心：拷贝继承+cll继承
-
+```javascript
     function Father(){
 	    this.handsome = true;
     }
@@ -111,10 +114,12 @@
     for(var prop in Father.prototype){
 	    Son.prototype[prop] = Father.prototype[prop]
     }
+```
 #### 寄生式组合继承（最佳方式）
 功能：是call+原型继承的升级版
 核心：将父类的原型包装成一个副本
 
+```javascript
     function Father(){
 	    this.handsome = true;
     }
@@ -123,18 +128,19 @@
     }
     Son.prototype = Object.create(Father.prototype)
     Son.prototype.constructor = Son
-    
+```
 
 ### 中间件继承
 功能：继承父类的公有方法
 核心：将子类的prototype的\__proto__属性指向父类的prototype
-
+```javascript
     function Father(){
 	    this.handsome = true;
     }
     function Son(){
     }
 	Son.prototype.__proto__ = Father.prototype;
+```
 不足：
 - 只能继承公有属性和方法
 
@@ -213,7 +219,7 @@ html和css都是对大小写不敏感，但是一般都采用小写的写法
 
 ###作用代码
 1、包含浮动元素
-
+```css
     .father{
 	    border:1px solid red;
 	    /*产生bfc布局*/
@@ -229,9 +235,10 @@ html和css都是对大小写不敏感，但是一般都采用小写的写法
 	    float:left:
 	    background:green;
     }
+```
 
 2、两栏布局
-
+```css
     .left{
 	    width:200px;
 	    height:1000px;
@@ -241,4 +248,4 @@ html和css都是对大小写不敏感，但是一般都采用小写的写法
 	    height:1000px;
 	    display:flow-root
     }
-
+```
