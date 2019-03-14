@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+<body>
+    <div id="root">
+        <div class="container">
+            <section class="sidebar">
+                <ul class="menu"></ul>
+            </section>
+            <section class="main">
+                <article class="post"></article>
+                <p class="copyright"></p>
+            </section>
+        </div>
+    </div>
+</body>
+<script>
+    const printNode = (node) => {
+        console.log(`node tagName:${node.tagName}`)
+        console.log(`node className:${node.className}`)
+    }
+    //BFS ==> breadth-first search
+    //广度优先遍历，仅对每个节点进行一次操作
+    const traverseBFS = (ndRoot,handleFunction) => {
+        //声明一个队列，先进先出
+        const queue = [ndRoot]
+
+        while(queue.length){
+            //采用shift移出
+            const node = queue.shift()
+            //对节点进行操作
+            handleFunction(node)
+            //判断有没有子节点
+            if(node.children.length==0){
+                continue
+            }
+            //首先将类数组对象转换成数组
+            //然后将每个子节点加入数组
+            //方法一==>类数组对象没有forEach，先使用from方法将类数组对象转换为数组，再使用forEach循环
+            Array.from(node.children).forEach(child => queue.push(child))
+            //方法二==>使用扩展运算符将子节点加入数组
+            //          扩展运算符能将类数组对象转变成数组
+            //queue.push(...node.children)
+        }
+    }
+    const root = document.getElementById("root")
+    // traverseBFS(root,printNode)
+
+    const findNode = (tagName,className) => {
+        return (node) => {
+            if(node.tagName.toLowerCase() == tagName &&
+                node.className == className){
+                return true
+            }
+            return false
+        }
+    }
+    const extendDeep=(source,target) => {
+        for(var key in source){
+            var item = source[key]
+            console.log(item)
+            if(item instanceof Array){
+                target[key]=[]
+                extendDeep(item,target[key])
+            }else if(item instanceof Object){
+                target[key]={}
+                extendDeep(item,target[key])
+            }else{
+                target[key]=item
+            }
+        }
+    }
+    //广度优先遍历，记录遍历的路径
+    const findPathBFS=(ndRoot,goalFunction) => {
+        //记录遍历路径需要改变节点
+        //所以首先深拷贝原始数据
+        //### 不能使用JSON.stringify序列化进行深拷贝
+        //JSON.stringify只能序列化对象的可枚举的自有属性，所以这里是不能深拷贝dom节点的
+        //var dataSource = JSON.parse(JSON.stringify(ndRoot))
+        //### 不能使用自己构造的深拷贝函数extendDeep
+        //使用自己构造的深拷贝函数会陷入死循环
+        //var dataSource = {}
+        // extendDeep(ndRoot,dataSoure)
+        //### 只能使用dom节点自身的cloneNode方法进行拷贝
+        var dataSource = ndRoot.cloneNode(true)
+
+        //使用队列记录节点
+        var res = []
+        //将根节点放入队列
+        res.push(dataSource)
+        while(res.length != 0 ){
+            node = res.shift()
+            //如果找到该子节点
+            // console.log(node)
+            if(goalFunction(node)){
+                const result = []
+                //这里使用一个递归调用找父节点
+                //使用unshift进行插入
+                return (function findParent(node){
+                    result.unshift(node)
+                    if(node.parent) return findParent(node.parent)
+                    return result
+                })(node)
+            }
+            //如果该节点有子节点
+            if(node.children){
+                res.push(...Array.from(node.children).map(child => {
+                    child.parent = node
+                    return child
+                }))
+            }
+        }
+        //没有搜索到，则返回空数组
+        return []
+    }
+    // console.log(findPathBFS(root,findNode("section","main")))
+
+    //DFS ==> depth-first search
+    //深度优先遍历，仅对每个节点进行一次操作
+    const traverseDFS = (ndRoot,handleFunction) => {
+        //对当前节点进行操作
+        handleFunction(ndRoot)
+        if(ndRoot.children.length != 0){
+            Array.from(ndRoot.children).forEach(child => traverseDFS(child,handleFunction))
+        }
+    }
+    // traverseDFS(root,printNode)
+    //深度优先遍历，记录遍历的路径
+    const findPathDFS = (ndRoot,goalFunction) =>{
+        if(goalFunction(ndRoot)){
+            var result=[]
+            return (function findParent(node){
+                result.unshift(node)
+                // console.log(node)
+                if(node.parent) return findParent(node.parent)
+                return result
+            })(ndRoot)
+        }
+        if(ndRoot.children){
+            var arr = []
+            arr.push(...ndRoot.children)
+            arr =  arr.map(item =>{
+                item.parent=ndRoot
+                return item
+            })
+            //forEach无法跳出循环
+            // arr.forEach(item =>{
+            //     var res = findPathDFS(item,goalFunction)
+            //     if(res){
+            //         return res
+            //     } 
+            // })
+            for(item of arr){
+                var res = findPathDFS(item,goalFunction)
+                if(res){
+                    return res
+                }
+            }
+        }
+    }
+     console.log(findPathDFS(root,findNode("p","copyright")))
+
+
+
+     // 总结
+     // ## => 对于广度优先遍历 ==> 核心是一个队列，先进先出
+     // 采用一个队列，
+     // 首先存放根节点
+     // 然后，while循环判断队列是否为空
+     // 使用shift移出先进的节点，进行遍历操作的处理
+     // 然后将所有子节点push进队列
+     // 进入下一次循环
+     // ### => 广度优先遍历带路径
+     // 区别在于，在确认找到子节点后使用递归返回路径数组
+     //          在push子节点进数组之前将父节点变成子节点的parent属性
+     // ## => 对于深度优先遍历 ==> 核心是递归调用
+     // 采用递归调用
+     // 首先对根节点进行遍历操作
+     // 判断是否具有子节点，若存在，对子节点进行递归操作
+     // ### => 广度优先遍历带路径
+     // 区别在于，在确认找到子节点后使用递归返回路径数组
+     //          在对子节点进行递归操作之前加上parent属性，然后递归调用
+
+
+     // 其他知识点
+     // ==> 关于深拷贝
+     // JSON.stringify()序列化只能拷贝可枚举的自有属性
+     // 自定义的extentDeep()，因为采用的是for...in 循环，所以可以拷贝所有可枚举属性
+     // 但是，在拷贝dom节点时，会陷入死循环（每个节点有children，也有parentNode)
+     // 在拷贝dom节点时，采用element.cloneNode(true)方法,这个方法不会克隆绑定的事件，可以使用事件代理
+     // ==> 关于forEach()
+     // forEach循环不能使用break或者return退出
+     // 一般使用some()+return ture 或者 every()+return false
+     // 但是这里的递归调用我采用了for...of循环
+     // ==> 关于类数组对象
+     // element的children属性就是一个类数组对象
+     // 可以使用Array.from()方法转换成数组
+     // 也可以使用扩展运算符...
+</script>
+</html>
