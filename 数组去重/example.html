@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>数组去重</title>
+</head>
+<body>
+	
+</body>
+<script type="text/javascript">
+	var obj = {"a":123}
+
+	var arr = [1, 1, '1', '1', null, null, undefined, undefined, new String('1'), new String('1'), /a/, /a/, NaN, NaN,obj,obj,{"b":111},{"b":111}]
+	// 方法一 ==> 双层循环 ==> 依靠值和地址判断重复
+	// 使用===判断是否重复，
+	// ==> 地址相同的对象判断为重复
+	// ==> 地址不同但是内容相同判断为不重复
+	// ==> NaN判断为不重复
+	const doubleFor = (arr) => {
+		console.log("doubleFor:")
+		//res用来存储结果
+		var res = []
+		for(var i=0,arrLen=arr.length;i < arrLen;i++){
+			for(var j=0,resLen=res.length;j < resLen;j++){
+				//若res中存在arr[i]，则跳出循环
+				//使用 ===，值和类型都要相等
+				if(arr[i] === res[j])
+					break
+			}
+			//如果j等于res数组长度，说明arr[i]在res中不存在
+			if(j === resLen)
+				res.push(arr[i])
+		}
+		return res
+	}
+	console.log(doubleFor(arr))
+ 
+	// 方法二 ==> 使用indexOf简化内层循环 ==> 依靠值和地址判断重复
+	// 使用indexOf判断的本质还是===
+	// 所以结果和双层循环一致
+	const forIndexOf = (arr) => {
+		console.log("forIndexOf")
+		var res = []
+		for(var i=0,arrLen=arr.length;i<arrLen;i++){
+			var current = arr[i]
+			if(res.indexOf(current) === -1){
+				res.push(current)
+			}
+		}
+		return res
+	}
+	console.log(forIndexOf(arr))
+
+	// 方法三 ==> 使用filter简化外层循环 ==> 依靠值和地址判断重复
+	// NaN会被忽略掉
+	const filterIndexOf = (arr) => {
+		console.log("filterIndexOf")
+		//使用indexOf查询的索引和当前索引不一致，则说明重复
+		var res = arr.filter(function(item,index,array){
+			return array.indexOf(item) == index
+		})
+		return res
+	}
+	console.log(filterIndexOf(arr))
+
+	// 方法四 ==> 使用filter + Object ==> 依靠自己构造的键名判断重复
+	// 使用对象法需要注意的是 1 和 '1' 会判断成一样的值，因为对象的键名只能是字符串
+	// 改进方法，键名使用 typeof(item)+item
+	// 所有一般的对象都会判断成不重复(object[object Object])
+	const filterObject = (arr) => {
+		console.log("filterObject")
+		var obj = {}
+		return arr.filter(function(item,index,array){
+			// return obj.hasOwnProperty(typeof(item)+item) ? false : (obj[typeof(item)+item]=true)
+			//这种优化方式最好！！！
+			return obj.hasOwnProperty(typeof(item)+JSON.stringify(item)) ? false : (obj[typeof(item)+JSON.stringify(item)]=true)
+		})
+	}
+	console.log(filterObject(arr))
+
+	// 方法五 ==> 使用ES6的特性，新的数据结构Set ==> 依靠set特性判断重复，能识别NaN
+	// set能识别出
+	const setDeduplication = (arr) => {
+		console.log("setDeduplication")
+		// 方法1 => 使用数组构造一个set，然后使用from方法转换成数组
+		return Array.from(new Set(arr))
+		// 方法2 => 使用扩展运算符改造成数组
+		// return [...new Set(arr)]
+	}
+	console.log(setDeduplication(arr))
+
+	// 方法六 ==> 使用ES6的新特性，新的数据结构Map ==> 依靠值和地址判断重复
+	const mapDeduplication = (arr) => {
+		console.log("mapDeduplication")
+		const res = new Map()
+		return arr.filter((item) => !res.has(item) && res.set(item,1))
+	}
+	console.log(mapDeduplication(arr))
+</script>
+</html>
