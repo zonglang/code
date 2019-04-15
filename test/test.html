@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+
+</head>
+<body>
+    
+</body>
+<script type="text/javascript">
+// function findStr(arr){
+//     var obj = {}
+//     console.log(arr)
+//     for(var i = 0,len = arr.length;i < len;i++){
+//         if(arr[i] in obj){
+//             break
+//         }
+//         obj[arr[i]]=1
+//     }
+//     return i 
+// }
+// var str = "abcabcab"
+// var maxNum = 0
+// var strArr = str.split("")
+// for(var i = 0,len = strArr.length;i < len;i++){
+//     var num = findStr(strArr.slice(i))
+//     console.log(num)
+//     if(num > maxNum){
+//         maxNum = num
+//     }
+// }
+// console.log(maxNum)
+// letterChart = {"A":["B","C"],"B":["D","C","F"],"C":["E"],"D":[],"E":["D"],"F":["E","C"]}
+// outArr = []
+// function removeLetter(letter){
+//     outArr.push(letter)
+//     for(var i in letterChart){
+//         // console.log(i)
+//         for(var index = 0,len = letterChart[i].length;index<len;index++){
+//             if(letterChart[i][index] == letter){
+//                 letterChart[i].splice(index,1)
+//             }
+//             if(letterChart[i].length == 0){
+//                 removeLetter(i)
+//             }
+//         }
+//     }
+// }
+// for(var i in letterChart){
+//     if(letterChart[i].length == 0){
+//         removeLetter(i)
+//         break
+//     }
+// }
+// console.log(outArr)
+
+var get24 = function(...numbers) {
+	//十一种表达式计算形式
+	//a b c d 为数字
+	//o1 o2 为操作符
+	var exps = [
+		"ao1bo2co3d",
+		"(ao1b)o2co3d",
+		"ao1(bo2c)o3d",
+		"ao1bo2(co3d)",
+		"(ao1bo2c)o3d",
+		"((ao1b)o2c)o3d",
+		"(ao1(bo2c))o3d",
+		"ao1(bo2co3d)",
+		"ao1((bo2c)o3d)",
+		"ao1(bo2(co3d))",
+		"(ao1b)o2(co3d)"
+	]
+	//四种操作符
+	var operators = ["+", "-", "*", "/"]
+
+	//计算表达式的值
+	var calcStr = function(exp,a,b,c,d,o1,o2,o3){
+		exp = exp.replace("a",a)
+		exp = exp.replace("b",b)
+		exp = exp.replace("c",c)
+		exp = exp.replace("d",d)
+		exp = exp.replace("o1",o1)
+		exp = exp.replace("o2",o2)
+		exp = exp.replace("o3",o3)
+		return exp
+	}
+	var count = 0
+	
+	for(var a = 0 ; a < 4 ; a++){
+		for(var b = 0 ; b < 4 ; b++){
+			if(a == b)
+				continue
+			for(var c = 0 ; c < 4 ; c++){
+				if(a == c || b == c)
+					continue
+				for(var d = 0 ; d < 4 ;d++){
+					if( a == d || b == d || c == d)
+						continue
+					for(var exp of exps){
+						for(var o1 of operators){
+							for(var o2 of operators){
+								for(var o3 of operators){
+									count++
+									var str = calcStr(exp,numbers[a],numbers[b],numbers[c],numbers[d],o1,o2,o3)
+									if(eval(str) == 24){
+										console.log(str) 
+									}		
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	console.log(count)
+    return null;
+}
+get24(10,13,9,3)
+</script>
+</html>

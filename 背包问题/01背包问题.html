@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>01背包问题</title>
+</head>
+<body>
+	
+</body>
+<script type="text/javascript">
+	//最优子结构问题
+	// i ==> 第i个物品
+	// j ==> 背包容量为j
+	// w ==> 物品重量
+	// v ==> 物品价值
+	// 递归式
+	// 			 |	==>	0 								j < wi && i = 0
+	//			 |  ==>	v0								j >=wi && i = 0
+	//	f(i,j) = |	==>	f(i-1,j)						j < wi && i > 0 
+	//			 |	==>max(f(i-1,j),f(i-1,j-wi) + vi)	j >=wi && i > 0
+	//	
+function knapsack(weights, values, W){
+	var f = [[]]
+	//当i等于0的时候初始化
+	for(var j = 0;j <= W;j++){
+		if(j < weights[0]){
+			f[0][j] = 0
+		}else{
+			f[0][j] = values[0]
+		}
+	}
+	//当i大于等于0的时候的赋值
+	for(var j = 0;j <= W;j++){
+		for(var i = 1;i < weights.length;i++){
+			if(!f[i]){
+				f[i]=[]
+			}
+			if(j < weights[i]){
+				f[i][j] = f[i-1][j]
+			}else{
+				f[i][j] = Math.max(f[i-1][j],f[i-1][j-weights[i]] + values[i])
+			}
+		}
+	}
+	console.log(f)
+	return f[weights.length-1][W]
+}	
+var a = knapsack([2,2,6,5,4],[6,3,5,4,6],10)
+console.log(a)	
+
+//加入负一行优化循环
+//核心代码是双重for循环+状态转换方程
+function knapsack_1(weights,values,W){
+	var n = weights.length
+	var f = new Array(n)
+	f[-1] = new Array(W+1).fill(0)
+	for(var i=0;i < n;i++){
+		f[i] = new Array(W+1).fill(0)
+		for(var j=0;j <= W;j++){
+			if(j < weights[i]){
+				f[i][j] = f[i-1][j]
+			}else{
+				f[i][j] = Math.max(f[i-1][j],f[i-1][j-weights[i]]+values[i])
+			}
+		}
+	}
+	console.log(f)
+	return f[n-1][W]
+}	
+var a = knapsack_1([2,2,6,5,4],[6,3,5,4,6],10)
+console.log(a)	
+
+//滚动数组
+//
+function knapsack_scroll(weights,values,W){
+	var n = weights.length
+	var f = [new Array(W+1).fill(0),[]],lastLine=0,currentLine
+	for(var i=0;i<n;i++){
+		currentLine = lastLine === 0 ? 1 : 0
+		for(var j=0;j<=W;j++){
+			if(j<weights[i]){
+				f[currentLine][j] = f[lastLine][j]
+			}else{
+				f[currentLine][j] = Math.max(f[lastLine][j],f[lastLine][j-weights[i]]+values[i])
+			}
+		}
+		lastLine = currentLine
+	}
+	return f[currentLine][W]
+}
+var a = knapsack_scroll([2,2,6,5,4],[6,3,5,4,6],10)
+console.log(a)	
+
+</script>
+</html>

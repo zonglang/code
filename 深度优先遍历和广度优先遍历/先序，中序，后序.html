@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>先序，中序，后序遍历</title>
+</head>
+<body>
+	
+</body>
+<script type="text/javascript">
+	function TreeNode(val){
+		this.val = val
+		this.left = null
+		this.right = null
+	}
+	let root = new TreeNode("1")
+	let node1 = new TreeNode("2")
+	let node2 = new TreeNode("3")
+	let node3 = new TreeNode("4")
+	let node4 = new TreeNode("5")
+
+	root.left = node1
+	root.right = node3
+
+	node1.right = node2
+	node3.right = node4
+
+	//无递归的先序遍历
+	function preOrderTraverse(root,func){
+		//栈内存放结点
+		//栈用于临时存放数据，栈空判断是始终需要进行的
+		//若当前结点不为空，或者栈内存在结点，则可以继续执行
+		const stack = []
+		let pNode = root 
+		while(pNode != null || stack.length!=0){
+			if(pNode != null){
+				func(pNode.val)
+				stack.push(pNode.right)
+				pNode = pNode.left
+			}else{	//pNode == null && stack.length != 0
+				pNode = stack.pop()
+			}
+		}
+	}
+	preOrderTraverse(root,console.log)
+</script>
+</html>

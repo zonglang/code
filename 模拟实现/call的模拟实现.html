@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>call的模拟实现</title>
+</head>
+<body>
+	
+</body>
+<script type="text/javascript">
+	Function.prototype.call2 =function(context){
+		//判断context是不是null
+		context = context || window
+		//首先把函数变成context的方法
+		context.func = this
+		//然后对参数进行处理
+		const arr = []
+		for(let i = 1;i < arguments.length;i++){
+			arr.push(`arguments[${i}]`)
+		}
+		//执行方法
+		let result = eval(`context.func(${arr.join(",")})`)
+		delete context.func
+		return result
+	}
+	// 测试一下
+	var value = 2;
+
+	var obj = {
+	    value: 1
+	}
+
+	function bar(name, age) {
+	    console.log(this.value);
+	    return {
+	        value: this.value,
+	        name: name,
+	        age: age
+	    }
+	}
+
+	bar.call2(null); // 2
+
+	console.log(bar.call2(obj, 'kevin', 18));
+</script>
+</html>

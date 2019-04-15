@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>jsonp跨域</title>
+</head>
+<body>
+	
+</body>
+<script type="text/javascript">
+	function getJSONP(url, callback){
+		// 首先创建一个唯一的回调函数的名称
+		var cbNum = "cb" + getJSONP.counter++
+		var cbName  = "getJSONP." + cbNum
+
+		//将回调函数的名称加入url
+		if(url.indexOf("?") === -1){
+			url += "?jsonp=" + cbName
+		}else{
+			url += "&jsonp=" + cbName
+		}
+
+		//创建一个script标签用于发送请求
+		var oScript = document.createElement("script")
+		//定义将被脚本执行的回调函数
+		var getJSONP[cbNum] = function(response){
+			try{
+				callback(response)
+			}
+			finally{
+				delete getJSONP[cbNum]
+				oScript.parentNode.removeChild(oScript)
+			}
+		}
+		//立即触发HTTP请求
+		oScript.src = url
+		//添加到文档中执行
+		document.body.appendChild(oScript)
+	}
+	getJSONP.counter = 0
+</script>
+</html>

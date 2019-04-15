@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>apply的模拟实现</title>
+</head>
+<body>
+	
+</body>
+<script type="text/javascript">
+	Function.prototype.apply2 = function(context,arr){
+		//确定context是不是null
+		context = context || window
+		//给context增加方法
+		context.func = this
+		//对参数进行处理
+		let result
+		if(!arr){
+			result = context.func()
+		}else{
+			const arg = []
+			for(let i = 0;i < arr.length;i++){
+				arg.push(`arr[${i}]`)
+			}	
+			result = eval(`context.func(${arg.join(",")})`)
+		}
+		return result
+	}
+	//测试一下
+	var color = "green"
+	var redObj = {
+		color:"red"
+	}
+	function test(name,sex){
+		console.log(this.color)	//red
+		return {
+			color:this.color,
+			name:name,
+			sex:sex
+		}
+	}
+	console.log(test.apply2(redObj,["zonglang","male"]))
+</script>
+</html>

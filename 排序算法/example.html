@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+
+<body>
+</body>
+<script type="text/javascript">
+var arr = [3, 44, 38, 5, 47, 15, 36, 26, 27, 2, 46, 4, 19, 50, 48];
+//冒泡排序	
+//==> 外层循环代表交换轮数
+//==> 内层循环代表每轮交换次数
+const bubbleSort = (arr) => {
+	console.log("bubbleSort")
+    for (var i = 0,arrLen = arr.length; i < arrLen - 1; i++) {
+        for (var j = 0; j < arrLen - 1 - i; j++) {
+            if (arr[j] > arr[j + 1]) 
+                [arr[j], arr[j + 1]] = [arr[j + 1], arr[j]]
+            
+        }
+    }
+    return arr
+}
+console.log(bubbleSort(arr))
+//改进版冒泡排序
+//==> 使用变量i记录最后交换位置，默认为length-1
+//==> 使用变量pos记录每轮最后交换位置
+const bubbleSortImprove = (arr) => {
+	console.log("bubbleSortImprove")
+	var i = arr.length -1
+	while(i>0){
+		var pos = 0
+		for(var j = 0;j < i;j++){
+			if(arr[j]>arr[j+1]){
+				//记录最后交换位置
+				pos = j
+				[arr[j],arr[j+1]]=[arr[j+1],arr[j]]
+			}
+		}
+		i=pos
+	}
+	return arr
+}
+console.log(bubbleSortImprove(arr))
+
+//选择排序
+//从无序区选择最小的与无序区第一位交换
+const selectionSort = (arr) => {
+	
+}
+</script>
+
+</html>

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>模拟实现new</title>
+</head>
+<body>
+	
+</body>
+<script type="text/javascript">
+	function myNew(){
+		//首先创建一个对象
+		let obj = new Object()
+		//然后通过arguments对象找到构造函数
+		let con = Array.prototype.shift.call(arguments)
+		//然后绑定对象的原型
+		obj.__proto__ = con.prototype
+		//改变构造函数的this指向
+		let result = con.apply(obj, arguments)
+		return typeof result === 'object' ? result : obj
+	}
+	function test(name){
+		this.name = name 
+		this.sex = "male"
+	}
+	console.log(myNew(test,"zonglang"))
+</script>
+</html>
