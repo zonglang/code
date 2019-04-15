@@ -257,6 +257,7 @@ html和css都是对大小写不敏感，但是一般都采用小写的写法
 对于`行内非替换元素`设置是不起作用的，因为外边距不会改变行高，但是左右边距会有影响，padding-top和padding-bottom也是同理
 
 ## 
+[css权重](https://github.com/zonglang/code/issues/1)
 <a href="https://github.com/zonglang/code/issues/1" target="_blank">css权重</a>
 
 ##BFC
