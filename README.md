@@ -165,8 +165,8 @@
 ## 闭包
 
 ## 事件捕获与冒泡
-(segmentFault讲解文章)[https://segmentfault.com/a/1190000005654451]
-(js事件模型)[https://segmentfault.com/a/1190000006934031#articleHeader10]
+[segmentFault讲解文章](https://segmentfault.com/a/1190000005654451)
+[js事件模型](https://segmentfault.com/a/1190000006934031#articleHeader10)
 ### 区别
 为了解决页面中的事件流而提出
 
@@ -257,7 +257,7 @@ html和css都是对大小写不敏感，但是一般都采用小写的写法
 对于`行内非替换元素`设置是不起作用的，因为外边距不会改变行高，但是左右边距会有影响，padding-top和padding-bottom也是同理
 
 ## 
-(css权重)[https://github.com/zonglang/code/issues/1]
+[css权重](https://github.com/zonglang/code/issues/1)
 
 ##BFC
 ### 什么是bfc？
