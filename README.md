@@ -258,7 +258,6 @@ html和css都是对大小写不敏感，但是一般都采用小写的写法
 
 ## 
 [css权重](https://github.com/zonglang/code/issues/1)
-<a href="https://github.com/zonglang/code/issues/1" target="_blank">css权重</a>
 
 ##BFC
 ### 什么是bfc？
